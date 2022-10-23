@@ -29,7 +29,7 @@ def shell_command(args:dict ={}):
         cmd_list = []
         cmd_list.append(l.pop(0))
         dict_parameters = l.pop(0)
-        print("par dict="+str(dict_parameters))
+        #print("par dict="+str(dict_parameters))
         for k in dict_parameters.keys():
             cmd_list.append(k)
             if type(dict_parameters[k]) == bool:
