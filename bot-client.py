@@ -44,6 +44,9 @@ parser_cmd = Parser()
 def shell_command(args:dict ={}):
     try:
         cmd = str(args["-c"])
+        fork_option = False
+        if "-f" in args.keys():
+            fork_option = True
         #print("cmd parsed = "+cmd)
         cmd_list = split_arg_string(cmd)
         print("CMD LIST PARSED = "+str(cmd_list))
@@ -59,24 +62,30 @@ def shell_command(args:dict ={}):
                 continue
             cmd_list.append(dict_parameters[k])"""
         
-        print("Executing: "+str(cmd_list))
-        #result = subprocess.run(cmd_list, capture_output=True, text=True, shell=True)
-        result = subprocess.Popen(cmd_list,stdout=subprocess.PIPE, stderr=subprocess.PIPE,shell=True)
-        text_stout = ""
-        while True:
-            line = result.stdout.readline()
-            if not line:
-                break
-            text_stout += str(line.rstrip())[2:-1]+"\n"
         
-        text_sterr = ""
-        while True:
-            line = result.stderr.readline()
-            if not line:
-                break
-            text_sterr += str(line.rstrip())[2:-1]+"\n"
-        
-        print("Result: "+str(text_stout))
+        if fork_option == True:
+            print("Forked: "+str(cmd_list))
+            text_stout = "process forked... stdout ignored"
+            text_sterr = "process forked... stderr ignored"
+            subprocess.run(cmd_list, capture_output=False, shell=True)
+        else:
+            print("Executing: "+str(cmd_list))
+            result = subprocess.Popen(cmd_list,stdout=subprocess.PIPE, stderr=subprocess.PIPE,shell=True)
+            text_stout = ""
+            while True:
+                line = result.stdout.readline()
+                if not line:
+                    break
+                text_stout += str(line.rstrip())[2:-1]+"\n"
+            
+            text_sterr = ""
+            while True:
+                line = result.stderr.readline()
+                if not line:
+                    break
+                text_sterr += str(line.rstrip())[2:-1]+"\n"
+            
+            print("Result: "+str(text_stout))
         return [0,"Output of cmd:"+str(cmd_list)+": \nstdout:\n"+text_stout+"\nstderr:\n"+text_sterr]
     except Exception as e:
         return [0,"Shell command function exception: "+str(e)]

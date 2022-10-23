@@ -50,7 +50,40 @@ class Parser():
         return [main_command, arguments_dict]
 
 
-"""p = Parser()
+
+
+def split_arg_string(string):
+    """Given an argument string this attempts to split it into small parts."""
+    rv = []
+    for match in re.finditer(r"('([^'\\]*(?:\\.[^'\\]*)*)'"
+                             r'|"([^"\\]*(?:\\.[^"\\]*)*)"'
+                             r'|\S+)\s*', string, re.S):
+        arg = match.group().strip()
+        if arg[:1] == arg[-1:] and arg[:1] in '"\'':
+            arg = arg[1:-1].encode('ascii', 'backslashreplace') \
+                .decode('unicode-escape')
+        try:
+            arg = type(string)(arg)
+        except UnicodeError:
+            pass
+        rv.append(arg)
+    return rv
+"""
+p = Parser()
 print(p.parse("shellexec -c 'ls -l'"))
 print(p.parse("shellexec -c 'dir /d'"))
-print(p.parse("ls -l 10"))"""
+print(p.parse("ls -l 10"))
+l = p.parse("shellexec -c 'echo MSG > out | start /B notepad out' -f")
+nome = l.pop(0)
+par_dict = l.pop(0)
+print("-f" in par_dict.keys())
+l = split_arg_string(par_dict["-c"])
+print(str(l))
+import subprocess
+subprocess.run(l, capture_output=False, shell=True)
+print("ciao")
+try:
+    while True:
+        pass 
+except Exception as e:
+    print("end")"""

@@ -94,8 +94,13 @@ def shell_command(args:dict ={}):
     if len(list_of_clients)==0:
         return [0, "No clients connected"]
     msg_to_cli = "shellexec "
+
+
     for k in args.keys():
-        msg_to_cli+= str(k)+" '"+str(args[k])+"' "
+        if k == "-c":
+            msg_to_cli+= str(k)+" '"+str(args[k])+"' "
+        else:
+            msg_to_cli+= str(k)+" "+str(args[k])+" "
     #print("msgtocli = "+msg_to_cli)
     list_of_clients[client_index].send(msg_to_cli.encode())
 
