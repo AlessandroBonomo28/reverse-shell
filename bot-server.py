@@ -1,4 +1,5 @@
 
+import errno
 import struct
 from typing import List
 from audioop import add
@@ -169,7 +170,14 @@ def handle_master_client(conn: socket.socket, addr):
                 if  exit_status != 0:
                         break
             except Exception as e:
-                msg = "Syntax error, retry.".encode()
+                if e.errno == errno.WSAECONNRESET:
+                    msg = "Lost connection to SLAVE".encode()
+                    global client_index
+                    list_of_clients[client_index].close()
+                    del list_of_clients[client_index]
+                    client_index = 0
+                else: 
+                    msg = "Syntax error, retry.".encode()
                 msg = struct.pack('>I', len(msg)) + msg
                 conn.send(msg)
                 print("ex: "+str(e))
