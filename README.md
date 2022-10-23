@@ -28,7 +28,8 @@ comandi per il client MASTER:
    - shellexec -c 'mkdir folder1' -> crea una cartella di nome 'folder1'
    - shellexec -c 'echo hello > file.txt' -> crea un file di nome 'file.txt' e scrive 'hello' all'interno
    - shellexec -c 'type file.txt' -> visualizza il contenuto di 'file.txt'
-   - shellexec -c 'echo shutdown -s -t 2' -> spegne il computer
+   - shellexec -c 'shutdown -s -t 2' -> spegne il computer
+   - shellexec -c 'shutdown /r' -> riavvia il computer
    - shellexec -c 'type NUL > out' -> crea un file vuoto di nome 'out'
    ###### Scrivere ed eseguire file bat
    1) shellexec -c 'echo riga 1 > file.bat' -> creo file bat e scrivo 'riga 1'
