@@ -70,7 +70,7 @@ def shell_command(args:dict ={}):
             text_output += str(line.rstrip())[2:-1]+"\n"
             """
         
-        print("Result: "+str(text_output))
+        print("Result: "+str(out.decode()))
         return [0,"Output of cmd:"+str(cmd_list)+": \nstout:\n"+out.decode()+"\nstderr:\n"+err.decode()]
     except Exception as e:
         return [0,"Shell command function exception: "+str(e)]
