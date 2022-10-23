@@ -19,8 +19,9 @@ comandi per il client MASTER:
 ## Il comando 'shellexec':
    shellexec è l'equivalente di una reverse shell: esegue un comando shell sul client SLAVE selezionato e stampa l'output. 
    #### SINTASSI
-   La sintassi del comando è la seguente: **shellexec -c '\<comando shell\>'** <br/>
+   La sintassi del comando è la seguente: **shellexec -c '\<comando shell\> \[-f\]'** <br/>
    il parametro **-c** sta per command e prende come parametro il comando shell da eseguire sullo SLAVE selezionato
+   il parametro **-f** è opzionale e permette di eseguire il fork del comando
    #### ESEMPI CON COMANDI UNIX:
    - shellexec -c 'cd' -> visualizza il path attuale
    - shellexec -c 'dir' -> visualizza il contenuto della dir corrente
@@ -36,8 +37,10 @@ comandi per il client MASTER:
    2) shellexec -c 'echo riga 2 >> file.bat' -> scrivo in coda al file 'riga 2'
    3) shellexec -c 'echo riga 3 >> file.bat' -> scrivo in coda al file 'riga 3'
    4) shellexec -c 'file' -> eseguo file bat
-   ###### Creare una finestra notepad con un messaggio all'interno
-   1) shellexec -c 'echo SCRIVI QUI IL MESSAGGIO DEL NOTEPAD > out | start /B notepad out' -> scrivi in file out + apri out con notepad in background
+   ###### Eseguire il fork di un programma
+   - shellexec -c 'start /B notepad out' -f -> fork di notepad
+   ###### Eseguire il fork di una finestra notepad con un messaggio all'interno
+   1) shellexec -c 'echo SCRIVI QUI IL MESSAGGIO DEL NOTEPAD > out | start /B notepad out' -f
    2) shellexec -c 'del out' -> cancella il file temporaneo 'out'
    #### ESEMPI CON COMANDI LINUX:
    - shellexec -c 'cd' -> visualizza il path attuale
