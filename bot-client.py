@@ -5,6 +5,7 @@ import subprocess
 import platform
 import socket
 from typing import List
+from unittest import result
 from myparser import Parser
 import re
 
@@ -60,18 +61,23 @@ def shell_command(args:dict ={}):
         
         print("Executing: "+str(cmd_list))
         #result = subprocess.run(cmd_list, capture_output=True, text=True, shell=True)
-        sp = subprocess.Popen(cmd_list,stdout=subprocess.PIPE, stderr=subprocess.PIPE,shell=True)
-        out, err = sp.communicate()
-        """text_output = ""
+        result = subprocess.Popen(cmd_list,stdout=subprocess.PIPE, stderr=subprocess.PIPE,shell=True)
+        text_stout = ""
         while True:
-            line = out.stdout.readline()
+            line = result.stdout.readline()
             if not line:
                 break
-            text_output += str(line.rstrip())[2:-1]+"\n"
-            """
+            text_stout += str(line.rstrip())[2:-1]+"\n"
         
-        print("Result: "+str(out.decode()))
-        return [0,"Output of cmd:"+str(cmd_list)+": \nstout:\n"+out.decode()+"\nstderr:\n"+err.decode()]
+        text_sterr = ""
+        while True:
+            line = result.stderr.readline()
+            if not line:
+                break
+            text_sterr += str(line.rstrip())[2:-1]+"\n"
+        
+        print("Result: "+str(text_stout))
+        return [0,"Output of cmd:"+str(cmd_list)+": \nstdout:\n"+text_stout+"\nstderr:\n"+text_sterr]
     except Exception as e:
         return [0,"Shell command function exception: "+str(e)]
 
