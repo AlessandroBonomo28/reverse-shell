@@ -19,7 +19,7 @@ comandi per il client MASTER:
 ## Il comando 'shellexec':
    shellexec è l'equivalente di una reverse shell: esegue un comando shell sul client SLAVE selezionato e stampa l'output. 
    #### SINTASSI
-   La sintassi del comando è la seguente: shellexec -c \'<comando shell>\'<br/>
+   La sintassi del comando è la seguente: shellexec -c '\<comando shell\>' <br/>
    il parametro -c sta per command e prende come parametro il comando shell da eseguire sullo SLAVE selezionato
    #### ESEMPI CON COMANDI UNIX:
    - shellexec -c 'cd' -> visualizza il path attuale
