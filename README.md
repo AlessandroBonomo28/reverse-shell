@@ -18,20 +18,21 @@ comandi per il client MASTER:
 - 'exit': chiude la connessione con il client MASTER
 ## Il comando 'shellexec':
    shellexec è l'equivalente di una reverse shell: esegue un comando shell sul client SLAVE selezionato e stampa l'output. 
-   ### SINTASSI
-   shellexec -c '<comando shell>'
-   -c prende come parametro il comando da eseguire su client SLAVE
-   ### ESEMPIO CON COMANDI UNIX:
+   #### SINTASSI
+   La sintassi del comando è la seguente: *shellexec -c '<comando shell>'*
+   il parametro -c sta per command e prende come parametro il comando shell da eseguire sullo SLAVE selezionato
+   #### ESEMPI CON COMANDI UNIX:
    shellexec -c 'cd' -> visualizza il path attuale
    shellexec -c 'dir' -> visualizza il contenuto della dir corrente
    shellexec -c 'dir -d C:\' -> visualizza il contenuto della dir C:\
    shellexec -c 'echo -hello> -file.txt' -> crea un file di nome '-file.txt' e scrive '-hello' all'interno
    shellexec -c 'type -file.txt' -> visualizza il contenuto di '-file.txt'
-   NOTE: alcuni output di shellexec sono troppo grandi e vengono troncati. Alcune volte capita che il comando
+   #### NOTE: 
+   alcuni output di shellexec sono troppo grandi e vengono troncati. Alcune volte capita che il comando
    shellexec -c 'dir' invia un output che satura il buffer di ricezione. Quando il buffer è saturo i comandi
    successivi ricevono come risposta il continuo dell'output precedente. Quando succede bisogna eseguire il
    comando 'flush' finchè il server non torna a rispondere normalmente.
-   ESEMPIO CON COMANDI LINUX:
+   #### ESEMPI CON COMANDI LINUX:
    shellexec -c 'cd' -> visualizza il path attuale
    shellexec -c 'ls' -> visualizza il contenuto della dir corrente
    shellexec -c 'ls -l' -> visualizza il contenuto della dir corrente con dettagli
