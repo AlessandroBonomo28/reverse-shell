@@ -3,7 +3,7 @@ reverse shell in python. Un client master può eseguire comandi sui client slave
 
 Istruzioni d'uso:
 1) avviare lo script bot-server
-2) avviare lo script bot-master-client sullo stesso computer su cui gira il server e inserire l'indirizzo IP: 127.0.0.1
+2) avviare lo script bot-master-client sullo stesso computer su cui gira il server
 3) avviare lo script bot-client su un computer della rete locale e inserire l'indirizzo IP del server
 
 script bot-server:
@@ -36,4 +36,5 @@ comandi per il client MASTER:
              shellexec -c 'echo -hello> -file.txt' -> crea un file di nome '-file.txt' e scrive '-hello' all'interno
              shellexec -c 'cat -file.txt' -> visualizza il contenuto di '-file.txt'
 
-script bot-master-client
+script bot-master-client:
+
