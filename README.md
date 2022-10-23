@@ -1,23 +1,24 @@
 # reverse-shell
 reverse shell in python. Un client master può eseguire comandi sui client slave collegati al server  
 
-Istruzioni d'uso:
+#Istruzioni d'uso:
 1) avviare lo script bot-server
 2) avviare lo script bot-master-client sullo stesso computer su cui gira il server
 3) avviare lo script bot-client su un computer della rete locale e inserire l'indirizzo IP del server
 
-script bot-server:
+#script bot-server:
 Ascolta sulla porta 12000. Quando riceve una connessione, se il client ha IP 127.0.0.1 (localhost), allora lo identifica
 come MASTER, altrimenti, lo identifica come SLAVE e lo conserva in una lista. Il server mette a disposizione una serie di
 comandi per il client MASTER:
-'help': lista i comandi eseguibili su server 
-'clients': stampa il numero di SLAVES connessi
-'selnext': seleziona il prossimo client SLAVE nella lista
-'sysinfo': richiede al client SLAVE selezionato di inviare informazioni sull'hardware
-'closeslave': chiude la connessione con il client SLAVE selezionato e lo rimuove dalla lista
-'exit': chiude la connessione con il client MASTER
-'shellexec': shellexec è l'equivalente di una reverse shell: esegue un comando shell sul client SLAVE selezionato e stampa l'output.
-             SINTASSI: shellexec -c '<comando shell>'
+-'help': lista i comandi eseguibili su server 
+-'clients': stampa il numero di SLAVES connessi
+-'selnext': seleziona il prossimo client SLAVE nella lista
+-'sysinfo': richiede al client SLAVE selezionato di inviare informazioni sull'hardware
+-'closeslave': chiude la connessione con il client SLAVE selezionato e lo rimuove dalla lista
+-'exit': chiude la connessione con il client MASTER
+-'shellexec': shellexec è l'equivalente di una reverse shell: esegue un comando shell sul client SLAVE selezionato e stampa l'output.__
+             *SINTASSI:*__ 
+             shellexec -c '<comando shell>'__
              -c prende come parametro il comando da eseguire su client SLAVE.
              ESEMPIO CON COMANDI UNIX:
              shellexec -c 'cd' -> visualizza il path attuale
@@ -36,5 +37,8 @@ comandi per il client MASTER:
              shellexec -c 'echo -hello> -file.txt' -> crea un file di nome '-file.txt' e scrive '-hello' all'interno
              shellexec -c 'cat -file.txt' -> visualizza il contenuto di '-file.txt'
 
-script bot-master-client:
-
+#script bot-master-client:
+Si collega alla socket 127.0.0.1:12000, invia comandi al server e stampa le risposte.
+  
+#script bot-client:
+Si collega all' indirizzo IP del server, inserito da tastiera. Riceve comandi dal server, li esegue e invia una risposta. 
