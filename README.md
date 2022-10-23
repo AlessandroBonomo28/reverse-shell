@@ -27,11 +27,6 @@ comandi per il client MASTER:
    - shellexec -c 'dir -d C:\' -> visualizza il contenuto della dir C:\\
    - shellexec -c 'echo -hello> -file.txt' -> crea un file di nome '-file.txt' e scrive '-hello' all'interno
    - shellexec -c 'type -file.txt' -> visualizza il contenuto di '-file.txt'
-   #### NOTE SU shellexec: 
-   alcuni output di shellexec sono troppo grandi e vengono troncati. Alcune volte capita che il comando
-   shellexec -c 'dir' invia un output che satura il buffer di ricezione. Quando il buffer è saturo i comandi
-   successivi ricevono come risposta il continuo dell'output precedente. Quando succede bisogna eseguire il
-   comando 'flush' finchè il server non torna a rispondere normalmente.
    #### ESEMPI CON COMANDI LINUX:
    - shellexec -c 'cd' -> visualizza il path attuale
    - shellexec -c 'ls' -> visualizza il contenuto della dir corrente
