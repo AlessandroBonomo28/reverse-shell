@@ -25,8 +25,19 @@ comandi per il client MASTER:
    - shellexec -c 'cd' -> visualizza il path attuale
    - shellexec -c 'dir' -> visualizza il contenuto della dir corrente
    - shellexec -c 'dir C:\\' -> visualizza il contenuto della dir C:\\
+   - shellexec -c 'mkdir folder1' -> crea una cartella di nome 'folder1'
    - shellexec -c 'echo hello > file.txt' -> crea un file di nome 'file.txt' e scrive 'hello' all'interno
    - shellexec -c 'type file.txt' -> visualizza il contenuto di 'file.txt'
+   - shellexec -c 'echo shutdown -s -t 2' -> spegne il computer
+   - shellexec -c 'type NUL > out' -> crea un file vuoto di nome 'out'
+   ###### Scrivere ed eseguire file bat
+   1) shellexec -c 'echo riga 1 > file.bat' -> creo file bat e scrivo 'riga 1'
+   2) shellexec -c 'echo riga 2 >> file.bat' -> scrivo in coda al file 'riga 2'
+   3) shellexec -c 'echo riga 3 >> file.bat' -> scrivo in coda al file 'riga 3'
+   4) shellexec -c 'file' -> eseguo file bat
+   ###### Creare una finestra notepad con un messaggio all'interno
+   1) shellexec -c 'echo SCRIVI QUI IL MESSAGGIO DEL NOTEPAD > out | start /B notepad out' -> scrivi in file out + apri out con notepad in background
+   2) shellexec -c 'del out' -> cancella il file temporaneo 'out'
    #### ESEMPI CON COMANDI LINUX:
    - shellexec -c 'cd' -> visualizza il path attuale
    - shellexec -c 'ls' -> visualizza il contenuto della dir corrente
