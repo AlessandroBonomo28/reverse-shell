@@ -1,4 +1,4 @@
-# reverse-shell
+# Reverse-shell
 reverse shell in python. Un client master può eseguire comandi sui client slave collegati al server  
 
 # Istruzioni d'uso:
@@ -10,15 +10,15 @@ reverse shell in python. Un client master può eseguire comandi sui client slave
 Ascolta sulla porta 12000. Quando riceve una connessione, se il client ha IP 127.0.0.1 (localhost), allora lo identifica
 come MASTER, altrimenti, lo identifica come SLAVE e lo conserva in una lista. Il server mette a disposizione una serie di
 comandi per il client MASTER:
--'help': lista i comandi eseguibili su server 
--'clients': stampa il numero di SLAVES connessi
--'selnext': seleziona il prossimo client SLAVE nella lista
--'sysinfo': richiede al client SLAVE selezionato di inviare informazioni sull'hardware
--'closeslave': chiude la connessione con il client SLAVE selezionato e lo rimuove dalla lista
--'exit': chiude la connessione con il client MASTER
--'shellexec': shellexec è l'equivalente di una reverse shell: esegue un comando shell sul client SLAVE selezionato e stampa l'output. __
-             *SINTASSI:*__ 
-             shellexec -c '<comando shell>'__
+- 'help': lista i comandi eseguibili su server 
+- 'clients': stampa il numero di SLAVES connessi
+- 'selnext': seleziona il prossimo client SLAVE nella lista
+- 'sysinfo': richiede al client SLAVE selezionato di inviare informazioni sull'hardware
+- 'closeslave': chiude la connessione con il client SLAVE selezionato e lo rimuove dalla lista
+- 'exit': chiude la connessione con il client MASTER
+- 'shellexec': shellexec è l'equivalente di una reverse shell: esegue un comando shell sul client SLAVE selezionato e stampa l'output. 
+             SINTASSI:
+             shellexec -c '<comando shell>'
              -c prende come parametro il comando da eseguire su client SLAVE.
              ESEMPIO CON COMANDI UNIX:
              shellexec -c 'cd' -> visualizza il path attuale
