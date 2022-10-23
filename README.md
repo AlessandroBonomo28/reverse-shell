@@ -43,4 +43,4 @@ comandi per il client MASTER:
 Si collega alla socket 127.0.0.1:12000, invia comandi al server e stampa le risposte.
   
 # Script bot-client:
-Si collega all' indirizzo IP del server, inserito da tastiera. Riceve comandi dal server, li esegue e invia una risposta. 
+Si collega all' indirizzo IP del server inserito da tastiera. Riceve comandi dal server, li esegue e invia una risposta. 
