@@ -24,15 +24,15 @@ comandi per il client MASTER:
    #### ESEMPI CON COMANDI UNIX:
    - shellexec -c 'cd' -> visualizza il path attuale
    - shellexec -c 'dir' -> visualizza il contenuto della dir corrente
-   - shellexec -c 'dir -d C:\' -> visualizza il contenuto della dir C:\\
-   - shellexec -c 'echo -hello> -file.txt' -> crea un file di nome '-file.txt' e scrive '-hello' all'interno
-   - shellexec -c 'type -file.txt' -> visualizza il contenuto di '-file.txt'
+   - shellexec -c 'dir C:\\' -> visualizza il contenuto della dir C:\\
+   - shellexec -c 'echo hello > file.txt' -> crea un file di nome 'file.txt' e scrive 'hello' all'interno
+   - shellexec -c 'type file.txt' -> visualizza il contenuto di 'file.txt'
    #### ESEMPI CON COMANDI LINUX:
    - shellexec -c 'cd' -> visualizza il path attuale
    - shellexec -c 'ls' -> visualizza il contenuto della dir corrente
    - shellexec -c 'ls -l' -> visualizza il contenuto della dir corrente con dettagli
-   - shellexec -c 'echo -hello> -file.txt' -> crea un file di nome '-file.txt' e scrive '-hello' all'interno
-   - shellexec -c 'cat -file.txt' -> visualizza il contenuto di '-file.txt'
+   - shellexec -c 'echo hello > file.txt' -> crea un file di nome 'file.txt' e scrive 'hello' all'interno
+   - shellexec -c 'cat file.txt' -> visualizza il contenuto di 'file.txt'
 
 # Script bot-master-client:
 Si collega alla socket 127.0.0.1:12000, invia comandi al server e stampa le risposte.
