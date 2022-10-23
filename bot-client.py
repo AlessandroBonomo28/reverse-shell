@@ -1,15 +1,35 @@
 from enum import Enum
 import socket
+import struct
 import subprocess
 import platform
 import socket
 from typing import List
 from myparser import Parser
-
+import re
 
 
 from command_executioner import CommandExecutioner
+
 server_port = 12000
+
+def split_arg_string(string):
+    """Given an argument string this attempts to split it into small parts."""
+    rv = []
+    for match in re.finditer(r"('([^'\\]*(?:\\.[^'\\]*)*)'"
+                             r'|"([^"\\]*(?:\\.[^"\\]*)*)"'
+                             r'|\S+)\s*', string, re.S):
+        arg = match.group().strip()
+        if arg[:1] == arg[-1:] and arg[:1] in '"\'':
+            arg = arg[1:-1].encode('ascii', 'backslashreplace') \
+                .decode('unicode-escape')
+        try:
+            arg = type(string)(arg)
+        except UnicodeError:
+            pass
+        rv.append(arg)
+    return rv
+
 def get_platform_info():
     platform_name = platform.platform()
     platform_version = platform.version()
@@ -24,7 +44,9 @@ def shell_command(args:dict ={}):
     try:
         cmd = str(args["-c"])
         #print("cmd parsed = "+cmd)
-        l = parser_cmd.parse(cmd)
+        cmd_list = split_arg_string(cmd)
+        print("CMD LIST PARSED = "+str(cmd_list))
+        """l = parser_cmd.parse(cmd)
         #print("list parsed="+str(l))
         cmd_list = []
         cmd_list.append(l.pop(0))
@@ -34,12 +56,21 @@ def shell_command(args:dict ={}):
             cmd_list.append(k)
             if type(dict_parameters[k]) == bool:
                 continue
-            cmd_list.append(dict_parameters[k])
+            cmd_list.append(dict_parameters[k])"""
         
         print("Executing: "+str(cmd_list))
-        result = subprocess.run(cmd_list, capture_output=True, text=True, shell=True)
-        print("Result: "+str(result.stdout))
-        return [0,"Output of cmd:"+str(cmd_list)+": "+str(result.stdout)]
+        #result = subprocess.run(cmd_list, capture_output=True, text=True, shell=True)
+        result = subprocess.Popen(cmd_list,stdout=subprocess.PIPE,shell=True)
+        text_output = ""
+        while True:
+            line = result.stdout.readline()
+            if not line:
+                break
+            text_output += str(line.rstrip())[2:-1]+"\n"
+            
+        
+        print("Result: "+str(text_output))
+        return [0,"Output of cmd:"+str(cmd_list)+": \n"+text_output]
     except Exception as e:
         return [0,"Shell command function exception: "+str(e)]
 
@@ -78,8 +109,10 @@ def main():
                         parsed_cmd = parser_cmd.parse(full_command)
                         cmd_name = parsed_cmd.pop(0)
                         param_dict = parsed_cmd.pop(0)
-                        exit_status, message = cmd_executioner.execute(cmd_name,param_dict)
-                        client_socket.send(message.encode())
+                        exit_status, msg = cmd_executioner.execute(cmd_name,param_dict)
+                        msg = msg.encode()
+                        msg = struct.pack('>I', len(msg)) + msg
+                        client_socket.sendall(msg)
                         if exit_status !=0:
                             break
                     except Exception as e:

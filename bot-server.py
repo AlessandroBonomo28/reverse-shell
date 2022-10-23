@@ -1,4 +1,5 @@
-import textwrap
+
+import struct
 from typing import List
 from audioop import add
 import socket
@@ -26,7 +27,24 @@ server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server_socket.bind(('', server_port))
 server_socket.listen(1)
 
+def recvall(sock, n)-> bytearray:
+    # Helper function to recv n bytes or return None if EOF is hit
+    data = bytearray()
+    while len(data) < n:
+        packet = sock.recv(n - len(data))
+        if not packet:
+            return None
+        data.extend(packet)
+    return data
 
+def recv_msg(sock)->bytearray:
+    # Read message length and unpack it into an integer
+    raw_msglen = recvall(sock, 4)
+    if not raw_msglen:
+        return None
+    msglen = struct.unpack('>I', raw_msglen)[0]
+    # Read the message data
+    return recvall(sock, msglen)
 
 #Elenco di comandi di esempio
 def get_name_of_selected_client(args:dict ={}) -> str:
@@ -79,7 +97,11 @@ def shell_command(args:dict ={}):
         msg_to_cli+= str(k)+" '"+str(args[k])+"' "
     #print("msgtocli = "+msg_to_cli)
     list_of_clients[client_index].send(msg_to_cli.encode())
-    info = list_of_clients[client_index].recv(1024).decode()
+
+    bytes_readed = recv_msg(list_of_clients[client_index])
+    print("Bytes received from slave: "+str(len(bytes_readed)))
+    info = bytes_readed.decode()
+    #info = list_of_clients[client_index].recv(1024).decode()
 
     return [0,"Sent shellexec to "+get_name_of_selected_client()+ ", got response: "+str(info)]
 
@@ -137,14 +159,19 @@ def handle_master_client(conn: socket.socket, addr):
                 cmd_name = parsed_cmd.pop(0)
                 param_dict = parsed_cmd.pop(0)
                 #print(str(cmd_name) + " , "+str(param_dict))
-                exit_status, message = cmd_executioner.execute(cmd_name,param_dict)
-                encoded_message = message.encode()
-                
-                conn.send(encoded_message)
+                exit_status, plain_text = cmd_executioner.execute(cmd_name,param_dict)
+                #encoded_message = plain_text.encode()
+                #conn.send(encoded_message)
+                encoded_text = plain_text.encode()
+                print("lenght of message to send: "+str(len(encoded_text)))
+                msg = struct.pack('>I', len(encoded_text)) + encoded_text
+                conn.sendall(msg)
                 if  exit_status != 0:
                         break
             except Exception as e:
-                conn.send("Syntax error, retry.".encode())
+                msg = "Syntax error, retry.".encode()
+                msg = struct.pack('>I', len(msg)) + msg
+                conn.send(msg)
                 print("ex: "+str(e))
     conn.close()
     global master_client
