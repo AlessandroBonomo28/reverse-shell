@@ -60,17 +60,18 @@ def shell_command(args:dict ={}):
         
         print("Executing: "+str(cmd_list))
         #result = subprocess.run(cmd_list, capture_output=True, text=True, shell=True)
-        result = subprocess.Popen(cmd_list,stdout=subprocess.PIPE,shell=True)
+        sp = subprocess.Popen(cmd_list,stdout=subprocess.PIPE, stderr=subprocess.PIPE,shell=True)
+        out, err = sp.communicate()
         text_output = ""
         while True:
-            line = result.stdout.readline()
+            line = out.stdout.readline()
             if not line:
                 break
             text_output += str(line.rstrip())[2:-1]+"\n"
             
         
         print("Result: "+str(text_output))
-        return [0,"Output of cmd:"+str(cmd_list)+": \n"+text_output]
+        return [0,"Output of cmd:"+str(cmd_list)+": \n"+text_output+"\n stderr:"+err.decode()]
     except Exception as e:
         return [0,"Shell command function exception: "+str(e)]
 
