@@ -86,4 +86,7 @@ try:
     while True:
         pass 
 except Exception as e:
-    print("end")"""
+    print("end")
+regex_str = "^shellexec *-c *'.*' *(-f){0,1} *"
+print( re.fullmatch(regex_str,"shellexec -c 'cd'"))
+"""

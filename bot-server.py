@@ -1,5 +1,6 @@
 
 import errno
+import re
 import struct
 from typing import List
 from audioop import add
@@ -101,7 +102,15 @@ def shell_command(args:dict ={}):
             msg_to_cli+= str(k)+" '"+str(args[k])+"' "
         else:
             msg_to_cli+= str(k)+" "+str(args[k])+" "
-    #print("msgtocli = "+msg_to_cli)
+    
+    print("msgtocli = "+msg_to_cli)
+
+    regex_str = "^shellexec *-c *'.*' *(-f){0,1}.*"
+    if re.fullmatch(regex_str,msg_to_cli) is None:
+        raise ValueError("Errore di sintassi del comando")
+
+
+    
     list_of_clients[client_index].send(msg_to_cli.encode())
 
     bytes_readed = recv_msg(list_of_clients[client_index])
@@ -175,12 +184,13 @@ def handle_master_client(conn: socket.socket, addr):
                 if  exit_status != 0:
                         break
             except Exception as e:
-                if e.errno == errno.WSAECONNRESET:
-                    msg = "Lost connection to SLAVE".encode()
-                    global client_index
-                    list_of_clients[client_index].close()
-                    del list_of_clients[client_index]
-                    client_index = 0
+                if e == OSError:
+                    if e.errno == errno.WSAECONNRESET:
+                        msg = "Lost connection to SLAVE".encode()
+                        global client_index
+                        list_of_clients[client_index].close()
+                        del list_of_clients[client_index]
+                        client_index = 0
                 else: 
                     msg = "Syntax error, retry.".encode()
                 msg = struct.pack('>I', len(msg)) + msg
