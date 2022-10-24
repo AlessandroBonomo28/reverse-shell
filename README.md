@@ -42,7 +42,7 @@ comandi per il client MASTER:
    - shellexec -c 'start /B notepad out' -f -> fork di apertura di un file con notepad
    - shellexec -c 'start /B mspaint img.jpg' -f -> fork apertura di un'immagine con paint
    ###### Scaricare un file
-   - shellexec -c 'curl --output img.jpg --url \<url immagine\> -s'
+   - shellexec -c 'curl --output file --url \<url file\> -s'
    ###### Eseguire il fork di una finestra notepad con un messaggio all'interno
    1) shellexec -c 'echo SCRIVI QUI IL MESSAGGIO DEL NOTEPAD > out | start /B notepad out' -f
    2) shellexec -c 'del out' -> cancella il file temporaneo 'out'
