@@ -39,9 +39,10 @@ comandi per il client MASTER:
    3) shellexec -c 'echo riga 3 >> file.bat' -> scrivo in coda al file 'riga 3'
    4) shellexec -c 'file' -> eseguo file bat
    ###### Eseguire il fork di un programma
-   - shellexec -c 'start /B \<nome file\>' -f -> avvia il file con il programma predefinito in fork
+   - shellexec -c 'start /B \[nome programma\] \<nome file\>' -f -> fork di apertura di un file con il programma predefinito
    - shellexec -c 'start /B notepad out' -f -> fork di apertura di un file con notepad
-   - shellexec -c 'start /B mspaint img.jpg' -f -> fork apertura di un'immagine con paint
+   - shellexec -c 'start /B mspaint img.jpg' -f -> fork di apertura di un'immagine con paint
+   - shellexec -c 'start /B music.mp3' -f -> fork di apertura di un file audio
    ###### Scaricare un file
    - shellexec -c 'curl --output file --url \<url file\> -s'
    ###### Eseguire il fork di una finestra notepad con un messaggio all'interno
