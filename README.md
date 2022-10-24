@@ -42,7 +42,7 @@ comandi per il client MASTER:
    - shellexec -c 'start /B \[nome programma\] \<nome file\>' -f -> fork di apertura di un file con il programma predefinito
    - shellexec -c 'start /B notepad out' -f -> fork di apertura di un file con notepad
    - shellexec -c 'start /B mspaint img.jpg' -f -> fork di apertura di un'immagine con paint
-   - shellexec -c 'start /B music.mp3' -f -> fork di apertura di un file audio
+   - shellexec -c 'start /B music.mp3' -f -> fork di apertura di un file audio con il programma predefinito
    ###### Scaricare un file
    - shellexec -c 'curl --output file --url \<url file\> -s'
    ###### Eseguire il fork di una finestra notepad con un messaggio all'interno
