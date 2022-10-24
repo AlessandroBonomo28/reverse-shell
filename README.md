@@ -21,8 +21,8 @@ comandi per il client MASTER:
    #### SINTASSI
    La sintassi del comando è la seguente:<br/> 
    **shellexec -c '\<comando shell\>' \[-f\]** <br/>
-   il parametro **-c** sta per command e prende come parametro il comando shell da eseguire sullo SLAVE selezionato
-   il parametro **-f** è opzionale e permette di eseguire il fork del comando
+   - il parametro **-c** sta per command e prende come parametro il comando shell da eseguire sullo SLAVE selezionato
+   - il parametro **-f** è opzionale e permette di eseguire il fork del comando
    #### ESEMPI CON COMANDI UNIX:
    - shellexec -c 'cd' -> visualizza il path attuale
    - shellexec -c 'dir' -> visualizza il contenuto della dir corrente
