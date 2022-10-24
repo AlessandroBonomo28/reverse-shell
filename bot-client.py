@@ -133,7 +133,7 @@ def main():
                                 client_socket.sendall(msg)
                                 if exit_status !=0:
                                     end_connection = True
-                                    print("MASTER requested to end this connection")
+                                    print("Requested to end this connection")
                                     break
                             except Exception as e:
                                 print("Invalid command: "+full_command+" " +str(e))

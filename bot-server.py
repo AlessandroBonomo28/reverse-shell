@@ -197,6 +197,14 @@ def handle_master_client(conn: socket.socket, addr):
         except Exception as e:
             #print("exp type = "+str(type(e)))
             if type(e) == ConnectionResetError:
+                global master_client
+                if master_client:
+                    try:
+                        master_client.send("".encode())
+                    except Exception as e:
+                        print("Lost connection to MASTER")
+                        master_client = None
+                        break
                 msg = "Lost connection to SLAVE".encode()
                 global client_index
                 list_of_clients[client_index].close()
@@ -211,7 +219,7 @@ def handle_master_client(conn: socket.socket, addr):
             conn.send(msg)
             print("ex: "+str(e))
     conn.close()
-    global master_client
+    
     master_client = None
     print("Finished serving MASTER client", addr)
 
