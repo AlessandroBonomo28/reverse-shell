@@ -1,5 +1,6 @@
 
 import errno
+from glob import glob
 import re
 import struct
 from typing import List
@@ -160,16 +161,26 @@ cmd_to_function = {
 
 cmd_executioner = CommandExecutioner(cmd_to_function)
 
+def close_all_client_socket():
+    global list_of_clients
+    for c in list_of_clients:
+        c.send("closecli".encode())
+        c.close()
+    global client_index
+    client_index = 0
+    list_of_clients = []
+    if master_client is not None:
+        master_client.close()
 
 def handle_master_client(conn: socket.socket, addr):
     identification_message = "You are identified as MASTER client "+str(addr)
     conn.send(identification_message.encode())
     print("Started serving MASTER client", addr)
     while True:
-        data = conn.recv(1024)
-        if data:
-            full_command = data.decode()
-            try:
+        try:
+            data = conn.recv(1024)
+            if data:
+                full_command = data.decode()
                 parsed_cmd = parser_cmd.parse(full_command)
                 cmd_name = parsed_cmd.pop(0)
                 param_dict = parsed_cmd.pop(0)
@@ -183,42 +194,49 @@ def handle_master_client(conn: socket.socket, addr):
                 conn.sendall(msg)
                 if  exit_status != 0:
                         break
-            except Exception as e:
-                if e == OSError:
-                    if e.errno == errno.WSAECONNRESET:
-                        msg = "Lost connection to SLAVE".encode()
-                        global client_index
-                        list_of_clients[client_index].close()
-                        del list_of_clients[client_index]
-                        client_index = 0
-                else: 
-                    msg = "Syntax error, retry.".encode()
-                msg = struct.pack('>I', len(msg)) + msg
-                conn.send(msg)
-                print("ex: "+str(e))
+        except Exception as e:
+            #print("exp type = "+str(type(e)))
+            if type(e) == ConnectionResetError:
+                msg = "Lost connection to SLAVE".encode()
+                global client_index
+                list_of_clients[client_index].close()
+                del list_of_clients[client_index]
+                client_index = 0
+            elif type(e) == ConnectionAbortedError:
+                print("Server aborted connection...")
+                exit(0)
+            else: 
+                msg = "Syntax error, retry.".encode()
+            msg = struct.pack('>I', len(msg)) + msg
+            conn.send(msg)
+            print("ex: "+str(e))
     conn.close()
     global master_client
     master_client = None
     print("Finished serving MASTER client", addr)
 
 print("Listening for clients on port",server_port,"...")
-while True:
-    try:
+
+try:
+    while True:
+        
         connection_socket , addr = server_socket.accept()
         if '127.0.0.1' in addr and master_client is None:
             master_client = connection_socket
             threading.Thread(target=handle_master_client,args=(connection_socket,addr)).start()
         else:
             print("Adding "+str(connection_socket.getpeername())+" to list")
-
             identification_message = "You are identified as SLAVE client "+str(addr)
             connection_socket.send(identification_message.encode())
-
             list_of_clients.append(connection_socket)
-            
-    except Exception as e:
-        print("Closing server: "+str(e))
-        server_socket.close()
-        break
+except Exception as e:
+    print("Exception! "+str(e)+ " e type = "+str(type(e)))
+finally:
+    print("Closing server... ")
+    close_all_client_socket()
+    server_socket.close()
+    print("Exiting...")
+    exit(0)
+    
 
 
