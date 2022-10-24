@@ -104,40 +104,51 @@ cmd_to_function = {
 cmd_executioner = CommandExecutioner(cmd_to_function)
 
 def main():
-    platform_info = str(get_platform_info())
-    ip_address = input("Insert IP Address > ")
-    if ip_address == "":
-        ip_address = "127.0.0.1"
-    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as client_socket:
+    end_connection = False
+    while not end_connection:
+        try:
+            ip_address = input("Insert IP Address > ")
+            if ip_address == "":
+                ip_address = "127.0.0.1"
+            with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as client_socket:
 
-        client_socket.connect((ip_address, server_port))
+                client_socket.connect((ip_address, server_port))
 
-        data = client_socket.recv(1024)
-        identity_response = data.decode()
-        print(identity_response)
-        print("Listening for commands from server...")
-        while True:
-            try:
                 data = client_socket.recv(1024)
-                if data:
-                    full_command = data.decode()
+                identity_response = data.decode()
+                print(identity_response)
+                print("Listening for commands from server...")
+                while True:
                     try:
-                        parsed_cmd = parser_cmd.parse(full_command)
-                        cmd_name = parsed_cmd.pop(0)
-                        param_dict = parsed_cmd.pop(0)
-                        exit_status, msg = cmd_executioner.execute(cmd_name,param_dict)
-                        msg = msg.encode()
-                        msg = struct.pack('>I', len(msg)) + msg
-                        client_socket.sendall(msg)
-                        if exit_status !=0:
-                            break
+                        data = client_socket.recv(1024)
+                        if data:
+                            full_command = data.decode()
+                            try:
+                                parsed_cmd = parser_cmd.parse(full_command)
+                                cmd_name = parsed_cmd.pop(0)
+                                param_dict = parsed_cmd.pop(0)
+                                exit_status, msg = cmd_executioner.execute(cmd_name,param_dict)
+                                msg = msg.encode()
+                                msg = struct.pack('>I', len(msg)) + msg
+                                client_socket.sendall(msg)
+                                if exit_status !=0:
+                                    end_connection = True
+                                    print("MASTER requested to end this connection")
+                                    break
+                            except Exception as e:
+                                print("Invalid command: "+full_command+" " +str(e))
+                                client_socket.send("Invalid command".encode())
+                                
                     except Exception as e:
-                        print("Invalid command: "+full_command+" " +str(e))
-                        client_socket.send("Invalid command".encode())
-                        
-            except:
-                print("Exception!")
+                        print("Exception! "+str(e))
+                        break
+        except Exception as e:
+            if e == KeyboardInterrupt:
+                print("Connection interrupted by keyboard")
                 break
+            else:
+                print("Can't connect to server")
+
 
 
 if __name__ == '__main__':
